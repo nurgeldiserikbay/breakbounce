@@ -69,17 +69,19 @@ class GameOpt {
   }
 
   handleDeviceOrientation(event) {
-    console.log('event', event)
     const accelerationX = event.acceleration.x
     const accelerationY = event.acceleration.y
+    const accelerationZ = event.acceleration.Z
 
-    const accelerationMultiplierX = 0.1
-    const accelerationMultiplierY = 0.1
+    console.log(accelerationX, accelerationY, accelerationZ)
 
-    const velocityX = accelerationX * accelerationMultiplierX
-    const velocityY = accelerationY * accelerationMultiplierY
+    // const accelerationMultiplierX = 0.1
+    // const accelerationMultiplierY = 0.1
 
-    this.ball.setVelocity(velocityX, velocityY)
+    // const velocityX = accelerationX * accelerationMultiplierX
+    // const velocityY = accelerationY * accelerationMultiplierY
+
+    // this.ball.setVelocity(velocityX, velocityY)
   }
 }
 
