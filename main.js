@@ -73,13 +73,15 @@ class GameOpt {
     const accelerationY = event.acceleration.y
     const accelerationZ = event.acceleration.Z
 
-    if (accelerationX || accelerationY || accelerationZ) {
+    if (accelerationX || accelerationY) {
       // const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
 
       // const swipeSpeed = Math.sqrt(swipeDistanceX ** 2 + swipeDistanceY ** 2) / deltaTime
   
       // const velocityX = Math.cos(angle) * swipeSpeed * forceMultiplier
       // const velocityY = Math.sin(angle) * swipeSpeed * forceMultiplier
+      console.log('accelerationX', accelerationX)
+      console.log('accelerationY', accelerationY)
 
       this.ball.setVelocity(this.forceMultiplierDevice * accelerationX, this.forceMultiplierDevice * accelerationY)
 
