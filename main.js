@@ -22,7 +22,7 @@ class GameOpt {
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
 
-    window.addEventListener('deviceorientation', handleDeviceOrientation)
+    window.addEventListener('devicemotion', this.handleDeviceOrientation.bind(this), true)
   }
   
   update() {}
@@ -69,6 +69,7 @@ class GameOpt {
   }
 
   handleDeviceOrientation(event) {
+    console.log('event', event)
     const accelerationX = event.acceleration.x
     const accelerationY = event.acceleration.y
 
@@ -99,5 +100,5 @@ const config = {
   },
   scene: GameOpt
 }
-
+console.log('window.DeviceMotionEvent', window.DeviceMotionEvent)
 const game = new Phaser.Game(config)
