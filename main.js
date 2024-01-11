@@ -6,6 +6,8 @@ class GameOpt {
     this.ball = null
     this.pointerStart = null
     this.lastPointerTime = 0
+    this.forceMultiplier = 500
+    this.forceMultiplierDevice = 500
   }
 
   preload() {
@@ -44,14 +46,12 @@ class GameOpt {
       const swipeDistanceX = pointer.position.x - this.pointerStart.x
       const swipeDistanceY = pointer.position.y - this.pointerStart.y
 
-      const forceMultiplier = 500
-
       const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
 
       const swipeSpeed = Math.sqrt(swipeDistanceX ** 2 + swipeDistanceY ** 2) / deltaTime
   
-      const velocityX = Math.cos(angle) * swipeSpeed * forceMultiplier
-      const velocityY = Math.sin(angle) * swipeSpeed * forceMultiplier
+      const velocityX = Math.cos(angle) * swipeSpeed * this.forceMultiplier
+      const velocityY = Math.sin(angle) * swipeSpeed * this.forceMultiplier
 
       this.ball.setVelocity(velocityX, velocityY)
 
@@ -73,15 +73,21 @@ class GameOpt {
     const accelerationY = event.acceleration.y
     const accelerationZ = event.acceleration.Z
 
-    console.log(accelerationX, accelerationY, accelerationZ)
+    if (accelerationX || accelerationY || accelerationZ) {
+      // const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
 
-    // const accelerationMultiplierX = 0.1
-    // const accelerationMultiplierY = 0.1
+      // const swipeSpeed = Math.sqrt(swipeDistanceX ** 2 + swipeDistanceY ** 2) / deltaTime
+  
+      // const velocityX = Math.cos(angle) * swipeSpeed * forceMultiplier
+      // const velocityY = Math.sin(angle) * swipeSpeed * forceMultiplier
 
-    // const velocityX = accelerationX * accelerationMultiplierX
-    // const velocityY = accelerationY * accelerationMultiplierY
+      this.ball.setVelocity(this.forceMultiplierDevice * accelerationX, this.forceMultiplierDevice * accelerationY)
 
-    // this.ball.setVelocity(velocityX, velocityY)
+      const bounceFactorX = 0.5
+      const bounceFactorY = 0.5
+
+      this.ball.setBounce(bounceFactorX, bounceFactorY)
+    }
   }
 }
 
