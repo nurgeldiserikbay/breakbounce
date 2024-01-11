@@ -1,7 +1,6 @@
 const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
 
-acl.start();
 class GameOpt {
   constructor() {
     this.ball = null
@@ -9,8 +8,6 @@ class GameOpt {
     this.lastPointerTime = 0
     this.forceMultiplier = 500
     this.forceMultiplierDevice = 500
-
-    this.acl = new Accelerometer({ frequency: 60 })
   }
 
   preload() {
@@ -31,13 +28,7 @@ class GameOpt {
   }
   
   update() {
-    this.acl.addEventListener('reading', () => {
-      const vector = [acl.x, acl.y, acl.z]
-      const magnitude = Math.sqrt(vector.reduce((s, v) => s + v * v, 0))
-      if (magnitude > THRESHOLD) {
-        console.log("I feel dizzy!")
-      }
-    })
+    
   }
 
   handleSwipeStart(pointer) {
