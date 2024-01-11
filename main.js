@@ -55,7 +55,7 @@ class GameOpt {
       const velocityX = Math.cos(angle) * swipeSpeed * this.forceMultiplier
       const velocityY = Math.sin(angle) * swipeSpeed * this.forceMultiplier
 
-      this.ball.setVelocity(velocityX, velocityY)
+      this.ball.setAcceleration(velocityX, velocityY)
 
       const bounceFactorX = 0.5
       const bounceFactorY = 0.5
@@ -73,7 +73,7 @@ class GameOpt {
   handleDeviceOrientation(event) {
     const accelerationX = event.acceleration.x
     const accelerationY = event.acceleration.y
-    const accelerationZ = event.acceleration.Z
+    const accelerationZ = event.acceleration.z
 
     if (accelerationX || accelerationY) {
       // const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
@@ -111,5 +111,5 @@ const config = {
   },
   scene: GameOpt
 }
-console.log('window.DeviceMotionEvent', window.DeviceMotionEvent)
+
 const game = new Phaser.Game(config)
