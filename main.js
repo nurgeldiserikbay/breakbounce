@@ -1,5 +1,6 @@
 const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
+const MOVE_MIN_VAL = 0.3
 
 class GameOpt {
   constructor() {
@@ -8,10 +9,19 @@ class GameOpt {
     this.lastPointerTime = 0
     this.forceMultiplier = 500
     this.forceMultiplierDevice = 500
+    this.collisionSound = null
+    this.bounceFactor = 0.5
+
+    this.acceleration = {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
   }
 
   preload() {
     this.load.image('ball', './assets/football.png')
+    this.load.audio('collision', './assets/collide.mp3')
   }
   
   create() {
@@ -20,15 +30,28 @@ class GameOpt {
     this.ball.setInteractive()
     this.ball.setCollideWorldBounds(true)
 
+    this.ball.setBounce(this.bounceFactor, this.bounceFactor)
+
+    this.collisionSound = this.sound.add('collision')
+
     this.input.on('pointerdown', this.handleSwipeStart.bind(this))
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
-
     window.addEventListener('devicemotion', this.handleDeviceOrientation.bind(this), true)
   }
   
   update() {
-    
+    if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
+      this.handleCollision(this.ball)
+    }
+  }
+
+  handleCollision(obj1) {
+    const force = Math.abs(obj1.body.velocity.x) + Math.abs(obj1.body.velocity.y)
+
+    var volume = Phaser.Math.Clamp(force / 100, 0, 1)
+    this.collisionSound.volume = volume
+    this.collisionSound.play()
   }
 
   handleSwipeStart(pointer) {
@@ -56,41 +79,27 @@ class GameOpt {
       const velocityY = Math.sin(angle) * swipeSpeed * this.forceMultiplier
 
       this.ball.setAcceleration(velocityX, velocityY)
-
-      const bounceFactorX = 0.5
-      const bounceFactorY = 0.5
-
-      this.ball.setBounce(bounceFactorX, bounceFactorY)
     }
   }
 
   handleSwipeEnd() {
-    // this.ball.setVelocity(0, 0)
-    
     this.pointerStart = null
   }
 
   handleDeviceOrientation(event) {
     const accelerationX = event.acceleration.x
     const accelerationY = event.acceleration.y
-    const accelerationZ = event.acceleration.z
 
-    if (accelerationX || accelerationY) {
-      // const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
-
-      // const swipeSpeed = Math.sqrt(swipeDistanceX ** 2 + swipeDistanceY ** 2) / deltaTime
-  
-      // const velocityX = Math.cos(angle) * swipeSpeed * forceMultiplier
-      // const velocityY = Math.sin(angle) * swipeSpeed * forceMultiplier
-      console.log(`x = ${accelerationX}; y = ${accelerationY}; z = ${accelerationZ}`)
-
-      this.ball.setVelocity(-1 * this.forceMultiplierDevice * accelerationX, this.forceMultiplierDevice * accelerationY)
-
-      const bounceFactorX = 0.5
-      const bounceFactorY = 0.5
-
-      this.ball.setBounce(bounceFactorX, bounceFactorY)
+    if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
+      console.log(`x = ${accelerationX};`)
+      this.acceleration.x = -1 * this.forceMultiplierDevice * accelerationX
     }
+    if (Math.abs(accelerationY) > MOVE_MIN_VAL) {
+      console.log(`y = ${accelerationY};`)
+      this.acceleration.y = this.forceMultiplierDevice * accelerationY
+    }
+
+    this.ball.setAcceleration(this.acceleration.x, this.acceleration.y)
   }
 }
 
