@@ -1,6 +1,6 @@
 const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
-const MOVE_MIN_VAL = 0.3
+const MOVE_MIN_VAL = 0.5
 
 class GameOpt {
   constructor() {
@@ -78,7 +78,7 @@ class GameOpt {
       const velocityX = Math.cos(angle) * swipeSpeed * this.forceMultiplier
       const velocityY = Math.sin(angle) * swipeSpeed * this.forceMultiplier
 
-      this.ball.setAcceleration(velocityX, velocityY)
+      this.ball.setVelocity(velocityX, velocityY)
     }
   }
 
@@ -87,19 +87,21 @@ class GameOpt {
   }
 
   handleDeviceOrientation(event) {
-    const accelerationX = event.acceleration.x
-    const accelerationY = event.acceleration.y
+    let accelerationX = 0
+    let accelerationY = 0
 
     if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
       console.log(`x = ${accelerationX};`)
-      this.acceleration.x = -1 * this.forceMultiplierDevice * accelerationX
+      accelerationX = -1 * this.forceMultiplierDevice * event.acceleration.x
     }
     if (Math.abs(accelerationY) > MOVE_MIN_VAL) {
       console.log(`y = ${accelerationY};`)
-      this.acceleration.y = this.forceMultiplierDevice * accelerationY
+      accelerationY = this.forceMultiplierDevice * event.acceleration.y
     }
 
-    this.ball.setAcceleration(this.acceleration.x, this.acceleration.y)
+    if (accelerationX || accelerationY) {
+      this.ball.setVelocity(accelerationX, accelerationY)
+    }
   }
 }
 
