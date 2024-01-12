@@ -89,18 +89,17 @@ class GameOpt {
   handleDeviceOrientation(event) {
     let accelerationX = 0
     let accelerationY = 0
+    console.log(event)
 
     if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
       console.log(`x = ${accelerationX};`)
       accelerationX = -1 * this.forceMultiplierDevice * event.acceleration.x
+      this.ball.setVelocityX(accelerationX)
     }
     if (Math.abs(accelerationY) > MOVE_MIN_VAL) {
       console.log(`y = ${accelerationY};`)
       accelerationY = this.forceMultiplierDevice * event.acceleration.y
-    }
-
-    if (accelerationX || accelerationY) {
-      this.ball.setVelocity(accelerationX, accelerationY)
+      this.ball.setVelocityY(accelerationY)
     }
   }
 }
