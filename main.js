@@ -38,15 +38,15 @@ class GameOpt {
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
     window.addEventListener('devicemotion', this.handleDeviceOrientation.bind(this), true)
-    window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
+    // window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
   }
 
-  handleOrientation(event) {
-    var alpha = event.alpha; // угол поворота вокруг оси Z
-    var beta = event.beta;   // угол наклона вокруг оси X
-    var gamma = event.gamma; // угол наклона вокруг оси Y
-    console.log('handleOrientation', event)
-  }
+  // handleOrientation(event) {
+  //   var alpha = event.alpha; // угол поворота вокруг оси Z
+  //   var beta = event.beta;   // угол наклона вокруг оси X
+  //   var gamma = event.gamma; // угол наклона вокруг оси Y
+  //   console.log('handleOrientation', event)
+  // }
   
   update() {
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
@@ -65,7 +65,7 @@ class GameOpt {
   handleSwipeStart(pointer) {
     this.pointerStart = {
       x: pointer.position.x,
-      y: pointer.position.y
+      y: pointer.position.y2
     }
 
     this.lastPointerTime = this.time.now
@@ -97,7 +97,7 @@ class GameOpt {
   handleDeviceOrientation(event) {
     let accelerationX = 0
     let accelerationY = 0
-    // console.log(event)
+    console.log(event)
 
     if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
       // console.log(`x = ${accelerationX};`)
