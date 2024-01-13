@@ -38,6 +38,14 @@ class GameOpt {
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
     window.addEventListener('devicemotion', this.handleDeviceOrientation.bind(this), true)
+    window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
+  }
+
+  handleOrientation(event) {
+    var alpha = event.alpha; // угол поворота вокруг оси Z
+    var beta = event.beta;   // угол наклона вокруг оси X
+    var gamma = event.gamma; // угол наклона вокруг оси Y
+    console.log('handleOrientation', event)
   }
   
   update() {
