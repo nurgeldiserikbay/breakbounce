@@ -1,6 +1,7 @@
 const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
 const MOVE_MIN_VAL = 0.5
+const FREQ = 100
 
 class GameOpt {
   constructor() {
@@ -12,7 +13,15 @@ class GameOpt {
     this.collisionSound = null
     this.bounceFactor = 0.5
 
+    this.orientation = {
+      freq: 0,
+      alpha: 0,
+      beta: 0,
+      gamma: 0,
+    }
+
     this.acceleration = {
+      freq: 0,
       x: 0,
       y: 0,
       z: 0,
@@ -37,16 +46,36 @@ class GameOpt {
     this.input.on('pointerdown', this.handleSwipeStart.bind(this))
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
-    window.addEventListener('devicemotion', this.handleDeviceOrientation.bind(this), true)
-    // window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
+
+    window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
+    window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
+    window.addEventListener('click', () => {
+      console.log('orientation', this.orientation)
+      console.log('acceleration', this.acceleration)
+    })
   }
 
-  // handleOrientation(event) {
-  //   var alpha = event.alpha; // угол поворота вокруг оси Z
-  //   var beta = event.beta;   // угол наклона вокруг оси X
-  //   var gamma = event.gamma; // угол наклона вокруг оси Y
-  //   console.log('handleOrientation', event)
-  // }
+  handleOrientation(event) {
+    if (event.timeStamp - this.orientation.freq > FREQ) {
+      this.orientation = {
+        freq: event.timeStamp,
+        alpha: event.alpha,
+        beta: event.beta,
+        gamma: event.gamma,
+      }
+    }
+  }
+
+  handleDeviceAcceleration(event) {
+    if (event.timeStamp - this.acceleration.freq > FREQ) {
+      this.acceleration = {
+        freq: event.timeStamp,
+        x: event.acceleration.x,
+        y: event.acceleration.y,
+        z: event.acceleration.z,
+      }
+    }
+  }
   
   update() {
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
@@ -94,22 +123,21 @@ class GameOpt {
     this.pointerStart = null
   }
 
-  handleDeviceOrientation(event) {
-    let accelerationX = 0
-    let accelerationY = 0
-    console.log(event)
+  // handleDeviceAcceleration(event) {
+  //   let accelerationX = 0
+  //   let accelerationY = 0
 
-    if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
-      // console.log(`x = ${accelerationX};`)
-      accelerationX = -1 * this.forceMultiplierDevice * event.acceleration.x
-      this.ball.setVelocityX(accelerationX)
-    }
-    if (Math.abs(accelerationY) > MOVE_MIN_VAL) {
-      // console.log(`y = ${accelerationY};`)
-      accelerationY = this.forceMultiplierDevice * event.acceleration.y
-      this.ball.setVelocityY(accelerationY)
-    }
-  }
+  //   if (Math.abs(accelerationX) > MOVE_MIN_VAL) {
+  //     // console.log(`x = ${accelerationX};`)
+  //     accelerationX = -1 * this.forceMultiplierDevice * event.acceleration.x
+  //     this.ball.setVelocityX(accelerationX)
+  //   }
+  //   if (Math.abs(accelerationY) > MOVE_MIN_VAL) {
+  //     // console.log(`y = ${accelerationY};`)
+  //     accelerationY = this.forceMultiplierDevice * event.acceleration.y
+  //     this.ball.setVelocityY(accelerationY)
+  //   }
+  // }
 }
 
 const config = {
