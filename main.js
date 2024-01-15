@@ -30,6 +30,17 @@ class GameOpt {
     }
   }
 
+  gravityController() {
+    gravitySensor = new GravitySensor({ frequency: 60 })
+    gravitySensor.addEventListener('reading', () => {
+      const x = Math.round(gravitySensor.x * this.gravityPixels)
+      const y = Math.round(gravitySensor.y * this.gravityPixels)
+  
+      this.physics.world.gravity.setTo(x, y)
+    })
+    gravitySensor.start()
+  }
+
   handleOrientation(event) {
     if (event.timeStamp - this.orientation.freq > FREQ) {
       this.orientation = {
@@ -41,19 +52,14 @@ class GameOpt {
     }
   }
 
-  updateGravityDirection() {
-    const x = Math.round(this.orientation.gamma / 180 * this.gravityPixels)
-    const y = Math.round(this.orientation.beta / 180 * this.gravityPixels)
-
-    this.physics.world.gravity.setTo(x, y)
-  }
-
   preload() {
     this.load.image('ball', './assets/football.png')
     this.load.audio('collision', './assets/collide.mp3')
   }
   
   create() {
+    this.gravityController()
+
     this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
     this.ball.setInteractive()
@@ -87,8 +93,6 @@ class GameOpt {
   }
   
   update() {
-    this.updateGravityDirection()
-
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
       this.handleCollision(this.ball)
     }
