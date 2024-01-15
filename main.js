@@ -1,3 +1,5 @@
+import { anglesToCoordinates } from './helpers'
+
 const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
 const MOVE_MIN_VAL = 0.5
@@ -13,8 +15,7 @@ class GameOpt {
     this.collisionSound = null
     this.bounceFactor = 0.5
 
-    this.gravitySensor = new GravitySensor({ frequency: 60 })
-    this.gravity = {}
+    this.gravityPixels = 300
 
     this.orientation = {
       freq: 0,
@@ -29,6 +30,13 @@ class GameOpt {
       y: 0,
       z: 0,
     }
+  }
+
+  getGravityValues() {
+    return [
+      this.gravityPixels ,
+      this.gravityPixels,
+    ]
   }
 
   preload() {
@@ -50,21 +58,12 @@ class GameOpt {
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
 
-    if (this.gravitySensor) {
-      // this.gravitySensor.addEventListener('reading', this.gravityReading.bind(this))
-      this.gravitySensor.start()
-    }
     window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
     window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
-      console.log('orientation', this.orientation)
+      console.log('orientation', anglesToCoordinates(this.orientation))
       console.log('acceleration', this.acceleration)
-      console.log('gravitySensor', this.gravitySensor)
     })
-  }
-
-  gravityReading(event) {
-    
   }
 
   handleOrientation(event) {
@@ -90,6 +89,8 @@ class GameOpt {
   }
   
   update() {
+    this.physics.world.gravity.setTo(...this.getGravityValues())
+
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
       this.handleCollision(this.ball)
     }
