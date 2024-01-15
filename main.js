@@ -2,9 +2,18 @@ const WIDTH = window.innerWidth
 const HEIGHT = window.innerHeight
 const MOVE_MIN_VAL = 0.5
 const FREQ = 100
+const MM_IN_INCH = 25.4
+const MM_IN_METR = 1000
 
 class GameOpt {
   constructor() {
+    this.pixelsOnMm = 3
+    this.pixelsOnMetr = 3000
+
+    this.obj = {
+      frictionFactor: 0.5,
+    }
+
     this.ball = null
     this.pointerStart = null
     this.lastPointerTime = 0
@@ -28,6 +37,8 @@ class GameOpt {
       y: 0,
       z: 0,
     }
+
+    this.setPixelsCount()
   }
 
   handleOrientation(event) {
@@ -47,7 +58,6 @@ class GameOpt {
   }
   
   create() {
-    this.setGravityPixels()
     this.gravityController()
 
     this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
@@ -144,23 +154,26 @@ class GameOpt {
   //   }
   // }
 
-  setGravityPixels() {
+  gravityController() {
+    const gravitySensor = new GravitySensor({ frequency: 30 })
+
+    gravitySensor.addEventListener('reading', () => {
+      const x = Math.abs(Math.round(gravitySensor.x * this.pixelsOnMetr * this.obj.frictionFactor || 1))
+      const y = Math.abs(Math.round(gravitySensor.y * this.pixelsOnMetr * this.obj.frictionFactor || 1))
+  
+      this.physics.world.gravity.setTo(-1 * x, y)
+    })
+
+    gravitySensor.start()
+  }
+
+  setPixelsCount() {
     const screenSizeElem = document.querySelector('.screen-size')
 
     if (screenSizeElem) {
-      this.gravityPixels = screenSizeElem.getBoundingClientRect().width / 25.4 * 1000
+      this.pixelsOnMm = screenSizeElem.getBoundingClientRect().width / MM_IN_INCH
+      this.pixelsOnMetr = this.pixelsOnMm * MM_IN_METR
     }
-  }
-
-  gravityController() {
-    const gravitySensor = new GravitySensor({ frequency: 30 })
-    gravitySensor.addEventListener('reading', () => {
-      const x = -1 * Math.round(gravitySensor.x * this.gravityPixels)
-      const y = Math.round(gravitySensor.y * this.gravityPixels)
-  
-      this.physics.world.gravity.setTo(x, y)
-    })
-    gravitySensor.start()
   }
 }
 
