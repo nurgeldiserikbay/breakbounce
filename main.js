@@ -33,8 +33,8 @@ class GameOpt {
   gravityController() {
     const gravitySensor = new GravitySensor({ frequency: 60 })
     gravitySensor.addEventListener('reading', () => {
-      const x = Math.round(gravitySensor.x * this.gravityPixels)
-      const y = -1 * Math.round(gravitySensor.y * this.gravityPixels)
+      const x = -1 * Math.round(gravitySensor.x * this.gravityPixels)
+      const y = Math.round(gravitySensor.y * this.gravityPixels)
   
       this.physics.world.gravity.setTo(x, y)
     })
