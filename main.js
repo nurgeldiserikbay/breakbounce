@@ -159,9 +159,9 @@ class GameOpt {
     const gravitySensor = new GravitySensor({ frequency: 30 })
 
     gravitySensor.addEventListener('reading', () => {
-      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * this.obj.frictionFactor || 1)
-      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * this.obj.frictionFactor || 1)
-  
+      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+      console.log(gravitySensor, x, y)
       this.physics.world.gravity.setTo(-1 * x, y)
     })
 
