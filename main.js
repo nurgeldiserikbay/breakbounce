@@ -15,6 +15,7 @@ class GameOpt {
     this.obj = {
       frictionFactor: 0.5,
       bounceFactor: 0.5,
+      weigth: 3,
       dragFactor: 0.98,
     }
 
@@ -137,10 +138,15 @@ class GameOpt {
         z: event.acceleration.z,
       }
 
-      const xVel = -1 * this.acceleration.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
-      const yVel = -1 * this.acceleration.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
+      if (Math.abs(this.acceleration.x) > 0.5) {
+        const xVel = -1 * this.acceleration.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
+        this.ball.setVelocityX(xVel)
+      }
 
-      this.ball.setVelocity(xVel, yVel)
+      if (Math.abs(this.acceleration.y) > 0.5) {
+        const yVel = -1 * this.acceleration.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
+        this.ball.setVelocityY(yVel)
+      }
     }
   }
 
