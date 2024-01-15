@@ -37,9 +37,9 @@ class GameOpt {
       y: 0,
       z: 0,
     }
-
+    
     this.setPixelsCount()
-    this.obj.frictionFactor = Math.min(Math.round(prompt('Friction factor value?')), 1)
+    this.obj.frictionFactor = Math.min(Number(prompt('Friction factor value?') || 1), 1)
     this.gravityController()
   }
 
@@ -157,10 +157,12 @@ class GameOpt {
 
   gravityController() {
     const gravitySensor = new GravitySensor({ frequency: 30 })
-    console.log(this.obj.frictionFactor)
+    console.log('pixelsOnMm', this.pixelsOnMm)
+    console.log('pixelsOnMetr', this.pixelsOnMetr)
+    console.log('frictionFactor', this.obj.frictionFactor)
     gravitySensor.addEventListener('reading', () => {
-      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (Number(this.obj.frictionFactor.toFixed(3)) || 1))
-      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (Number(this.obj.frictionFactor.toFixed(3)) || 1))
+      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
 
       this.physics.world.gravity.setTo(-1 * x, y)
     })
@@ -172,10 +174,8 @@ class GameOpt {
     const screenSizeElem = document.querySelector('.screen-size')
 
     if (screenSizeElem) {
-      this.pixelsOnMm = screenSizeElem.getBoundingClientRect().width / MM_IN_INCH
+      this.pixelsOnMm = Math.round(screenSizeElem.getBoundingClientRect().width / MM_IN_INCH * 10) / 10
       this.pixelsOnMetr = this.pixelsOnMm * MM_IN_METR
-
-      alert(this.pixelsOnMm, this.pixelsOnMetr)
     }
   }
 }
