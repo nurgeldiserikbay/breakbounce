@@ -15,4 +15,5 @@ canvas {
   pointer-events: none;
   height: 1in;
   width: 1in;
+  color: red;
 }
