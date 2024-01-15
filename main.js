@@ -42,9 +42,10 @@ class GameOpt {
   }
 
   updateGravityDirection() {
-    const [x, y] = anglesToCoordinates(this.orientation)
+    const x = Math.round(this.orientation.gamma / 180 * this.gravityPixels)
+    const y = Math.round(this.orientation.beta / 180 * this.gravityPixels)
 
-    this.physics.world.gravity.setTo(Math.round(x * this.gravityPixels), Math.round(y * this.gravityPixels))
+    this.physics.world.gravity.setTo(x, y)
   }
 
   preload() {
@@ -169,15 +170,3 @@ const config = {
 }
 
 const game = new Phaser.Game(config)
-
-function anglesToCoordinates({ alpha, beta, gamma }) {
-  // const alphaRad = alpha * Math.PI / 180
-  const betaRad = beta * Math.PI / 180
-  const gammaRad = gamma * Math.PI / 180
-
-  const x = Math.sin(betaRad) * Math.cos(gammaRad)
-  const y = Math.sin(betaRad) * Math.sin(gammaRad)
-  const z = Math.cos(betaRad)
-
-  return [x, y, z]
-}
