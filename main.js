@@ -58,6 +58,7 @@ class GameOpt {
   }
   
   create() {
+    this.obj.frictionFactor = Math.min(Math.round(prompt('Friction factor value?')), 1)
     this.gravityController()
 
     this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
