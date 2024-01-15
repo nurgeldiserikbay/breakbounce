@@ -8,3 +8,10 @@ canvas {
   display: block;
   margin: 0;
 }
+
+.screen-size {
+  position: absolute;
+  pointer-events: none;
+  height: 1in;
+  width: 1in;
+}

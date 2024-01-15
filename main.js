@@ -13,7 +13,7 @@ class GameOpt {
     this.collisionSound = null
     this.bounceFactor = 0.5
 
-    this.gravityPixels = 39.37 * window.devicePixelRatio
+    this.gravityPixels = 300
 
     this.orientation = {
       freq: 0,
@@ -28,17 +28,6 @@ class GameOpt {
       y: 0,
       z: 0,
     }
-  }
-
-  gravityController() {
-    const gravitySensor = new GravitySensor({ frequency: 30 })
-    gravitySensor.addEventListener('reading', () => {
-      const x = -1 * Math.round(gravitySensor.x * this.gravityPixels)
-      const y = Math.round(gravitySensor.y * this.gravityPixels)
-  
-      this.physics.world.gravity.setTo(x, y)
-    })
-    gravitySensor.start()
   }
 
   handleOrientation(event) {
@@ -58,6 +47,7 @@ class GameOpt {
   }
   
   create() {
+    this.setGravityPixels()
     this.gravityController()
 
     this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
@@ -153,6 +143,25 @@ class GameOpt {
   //     this.ball.setVelocityY(accelerationY)
   //   }
   // }
+
+  setGravityPixels() {
+    const screenSizeElem = document.querySelector('.screen-size')
+
+    if (screenSizeElem) {
+      this.gravityPixels = screenSizeElem.getBoundingClientRect().width / 25.4 * 1000
+    }
+  }
+
+  gravityController() {
+    const gravitySensor = new GravitySensor({ frequency: 30 })
+    gravitySensor.addEventListener('reading', () => {
+      const x = -1 * Math.round(gravitySensor.x * this.gravityPixels)
+      const y = Math.round(gravitySensor.y * this.gravityPixels)
+  
+      this.physics.world.gravity.setTo(x, y)
+    })
+    gravitySensor.start()
+  }
 }
 
 const config = {
