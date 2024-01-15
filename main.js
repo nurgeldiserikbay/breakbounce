@@ -30,11 +30,21 @@ class GameOpt {
     }
   }
 
-  getGravityValues() {
-    return [
-      this.gravityPixels ,
-      this.gravityPixels,
-    ]
+  handleOrientation(event) {
+    if (event.timeStamp - this.orientation.freq > FREQ) {
+      this.orientation = {
+        freq: event.timeStamp,
+        alpha: event.alpha,
+        beta: event.beta,
+        gamma: event.gamma,
+      }
+    }
+  }
+
+  updateGravityDirection() {
+    const [x, y] = anglesToCoordinates(this.orientation)
+    
+    this.physics.world.gravity.setTo(Math.round(x * this.gravityPixels), Math.round(y * this.gravityPixels))
   }
 
   preload() {
@@ -59,20 +69,9 @@ class GameOpt {
     window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
     window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
-      console.log('orientation', anglesToCoordinates(this.orientation))
+      console.log('orientation', )
       console.log('acceleration', this.acceleration)
     })
-  }
-
-  handleOrientation(event) {
-    if (event.timeStamp - this.orientation.freq > FREQ) {
-      this.orientation = {
-        freq: event.timeStamp,
-        alpha: event.alpha,
-        beta: event.beta,
-        gamma: event.gamma,
-      }
-    }
   }
 
   handleDeviceAcceleration(event) {
@@ -87,7 +86,7 @@ class GameOpt {
   }
   
   update() {
-    this.physics.world.gravity.setTo(...this.getGravityValues())
+    this.updateGravityDirection()
 
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
       this.handleCollision(this.ball)
