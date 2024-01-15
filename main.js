@@ -39,6 +39,8 @@ class GameOpt {
     }
 
     this.setPixelsCount()
+    this.obj.frictionFactor = Math.min(Math.round(prompt('Friction factor value?')), 1)
+    this.gravityController()
   }
 
   handleOrientation(event) {
@@ -58,8 +60,6 @@ class GameOpt {
   }
   
   create() {
-    this.obj.frictionFactor = Math.min(Math.round(prompt('Friction factor value?')), 1)
-    this.gravityController()
 
     this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
@@ -158,7 +158,6 @@ class GameOpt {
   gravityController() {
     const gravitySensor = new GravitySensor({ frequency: 30 })
 
-    console.log(gravitySensor)
     gravitySensor.addEventListener('reading', () => {
       console.log('reading')
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
