@@ -13,6 +13,9 @@ class GameOpt {
     this.collisionSound = null
     this.bounceFactor = 0.5
 
+    this.gravitySensor = new GravitySensor({ frequency: 60 })
+    this.gravity = {}
+
     this.orientation = {
       freq: 0,
       alpha: 0,
@@ -47,12 +50,21 @@ class GameOpt {
     this.input.on('pointermove', this.handleSwipeMove.bind(this))
     this.input.on('pointerup', this.handleSwipeEnd.bind(this))
 
+    if (this.gravitySensor) {
+      // this.gravitySensor.addEventListener('reading', this.gravityReading.bind(this))
+      this.gravitySensor.start()
+    }
     window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
     window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
       console.log('orientation', this.orientation)
       console.log('acceleration', this.acceleration)
+      console.log('gravitySensor', this.gravitySensor)
     })
+  }
+
+  gravityReading(event) {
+    
   }
 
   handleOrientation(event) {
