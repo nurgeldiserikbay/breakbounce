@@ -13,7 +13,7 @@ class GameOpt {
     this.collisionSound = null
     this.bounceFactor = 0.5
 
-    this.gravityPixels = 300
+    this.gravityPixels = 39.37 * window.devicePixelRatio
 
     this.orientation = {
       freq: 0,
@@ -31,7 +31,7 @@ class GameOpt {
   }
 
   gravityController() {
-    const gravitySensor = new GravitySensor({ frequency: 60 })
+    const gravitySensor = new GravitySensor({ frequency: 30 })
     gravitySensor.addEventListener('reading', () => {
       const x = -1 * Math.round(gravitySensor.x * this.gravityPixels)
       const y = Math.round(gravitySensor.y * this.gravityPixels)
