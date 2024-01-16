@@ -25,6 +25,12 @@ class GameOpt {
       y: 0,
       z: 0,
     }
+    this.accelerationGravity = {
+      freq: 0,
+      x: 0,
+      y: 0,
+      z: 0,
+    }
 
     this.pointerStart = null
     this.lastPointerTime = 0
@@ -131,11 +137,17 @@ class GameOpt {
 
   handleDeviceAcceleration(event) {
     if (event.timeStamp - this.acceleration.freq > FREQ) {
-      this.acceleration = {
+      this.accelerationGravity = {
         freq: event.timeStamp,
         x: event.acceleration.x,
         y: event.acceleration.y,
         z: event.acceleration.z,
+      }
+      this.accelerationGravity = {
+        freq: event.timeStamp,
+        x: event.accelerationIncludingGravity.x,
+        y: event.accelerationIncludingGravity.y,
+        z: event.accelerationIncludingGravity.z,
       }
 
       if (Math.abs(this.acceleration.x) > 0.5) {
