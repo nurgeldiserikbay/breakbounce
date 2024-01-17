@@ -137,12 +137,12 @@ class GameOpt {
         z: event.accelerationIncludingGravity.z,
       }
 
-      if (Math.abs(this.accelerationGravity.x) > 0.1) {
+      if (Math.abs(this.accelerationGravity.x) > 0.3) {
         const xVel = -1 * this.accelerationGravity.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
         this.ball.setVelocityX(xVel)
       }
 
-      if (Math.abs(this.accelerationGravity.y) > 0.1) {
+      if (Math.abs(this.accelerationGravity.y) > 0.3) {
         const yVel = -1 * this.accelerationGravity.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
         this.ball.setVelocityY(yVel)
       }
