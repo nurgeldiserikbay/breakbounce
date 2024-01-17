@@ -76,7 +76,7 @@ class GameOpt {
     
     window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
-      console.log('orientation', )
+      console.log('accelerationGravity', this.accelerationGravity)
       console.log('acceleration', this.acceleration)
     })
 
@@ -137,7 +137,7 @@ class GameOpt {
 
   handleDeviceAcceleration(event) {
     if (event.timeStamp - this.acceleration.freq > FREQ) {
-      this.accelerationGravity = {
+      this.acceleration = {
         freq: event.timeStamp,
         x: event.acceleration.x,
         y: event.acceleration.y,
