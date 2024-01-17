@@ -150,16 +150,16 @@ class GameOpt {
   }
 
   gravityController() {
-    const gravitySensor = new GravitySensor({ frequency: 30 })
+    // const gravitySensor = new GravitySensor({ frequency: 30 })
 
-    gravitySensor.addEventListener('reading', () => {
-      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
-      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+    // gravitySensor.addEventListener('reading', () => {
+    //   const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+    //   const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
 
-      this.physics.world.gravity.setTo(-1 * x, y)
-    })
+    //   this.physics.world.gravity.setTo(-1 * x, y)
+    // })
 
-    gravitySensor.start()
+    // gravitySensor.start()
   }
 
   setPixelsCount() {
@@ -183,7 +183,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 200 },
+      gravity: { y: 0 },
       debug: false
     }
   },
