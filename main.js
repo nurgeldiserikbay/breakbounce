@@ -13,18 +13,12 @@ class GameOpt {
     this.ball = null
 
     this.obj = {
-      frictionFactor: 0.5,
+      frictionFactor: 0.1,
       bounceFactor: 0.5,
-      weigth: 3,
+      weigth: 2,
       dragFactor: 0.98,
     }
 
-    this.acceleration = {
-      freq: 0,
-      x: 0,
-      y: 0,
-      z: 0,
-    }
     this.accelerationGravity = {
       freq: 0,
       x: 0,
@@ -77,7 +71,6 @@ class GameOpt {
     window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
       console.log('accelerationGravity', this.accelerationGravity)
-      console.log('acceleration', this.acceleration)
     })
 
     this.collisionSound = this.sound.add('collision')
@@ -136,13 +129,7 @@ class GameOpt {
   // }
 
   handleDeviceAcceleration(event) {
-    if (event.timeStamp - this.acceleration.freq > FREQ) {
-      this.acceleration = {
-        freq: event.timeStamp,
-        x: event.acceleration.x,
-        y: event.acceleration.y,
-        z: event.acceleration.z,
-      }
+    if (event.timeStamp - this.accelerationGravity.freq > FREQ) {
       this.accelerationGravity = {
         freq: event.timeStamp,
         x: event.accelerationIncludingGravity.x,
@@ -150,13 +137,13 @@ class GameOpt {
         z: event.accelerationIncludingGravity.z,
       }
 
-      if (Math.abs(this.acceleration.x) > 0.5) {
-        const xVel = -1 * this.acceleration.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
+      if (Math.abs(this.accelerationGravity.x) > 0.1) {
+        const xVel = -1 * this.accelerationGravity.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
         this.ball.setVelocityX(xVel)
       }
 
-      if (Math.abs(this.acceleration.y) > 0.5) {
-        const yVel = -1 * this.acceleration.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
+      if (Math.abs(this.accelerationGravity.y) > 0.1) {
+        const yVel = -1 * this.accelerationGravity.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
         this.ball.setVelocityY(yVel)
       }
     }
