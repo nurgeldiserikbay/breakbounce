@@ -152,8 +152,6 @@ class GameOpt {
     this.ball.setCircle()
     this.ball.setBounce(this.obj.bounceFactor)
     this.ball.setFriction(this.obj.friction)
-    this.ball.setInteractive()
-    this.ball.setCollideWorldBounds(true)
   }
 
   createBorderWalls() {
