@@ -156,6 +156,7 @@ class GameOpt {
 
   createBorderWalls() {
     this.matter.world.setBounds()
+    console.log(this, this.matter)
   }
 
   gravityController() {
@@ -165,8 +166,8 @@ class GameOpt {
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
       const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
 
-      this.matter.world.engine.gravity.x = -1 * x
-      this.matter.world.engine.gravity.y = y
+      this.matter.world.localWorld.gravity.x = -1 * x
+      this.matter.world.localWorld.gravity.y = y
       console.log(x, y)
     })
 
