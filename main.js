@@ -149,9 +149,9 @@ class GameOpt {
   createBall() {
     this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
-    this.ball.setCircle()
-    this.ball.setBounce(this.obj.bounceFactor)
-    this.ball.setFriction(this.obj.friction)
+    // this.ball.setCircle()
+    // this.ball.setBounce(this.obj.bounceFactor)
+    // this.ball.setFriction(this.obj.friction)
   }
 
   createBorderWalls() {
