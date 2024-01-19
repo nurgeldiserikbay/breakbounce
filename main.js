@@ -60,15 +60,15 @@ class GameOpt {
   }
   
   create() {
-    this.ball = this.physics.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
+    this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
+    this.ball.setCircle()
+    this.ball.setBounce(this.obj.bounceFactor)
+    this.ball.setFriction(this.obj.frictionFactor)
     this.ball.setInteractive()
     this.ball.setCollideWorldBounds(true)
-    this.ball.setBounce(this.obj.bounceFactor, this.obj.bounceFactor)
-    this.ball.setDamping(true)
-    this.ball.setDrag(this.obj.dragFactor)
     
-    window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
+    // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
       console.log('accelerationGravity', this.accelerationGravity)
     })
@@ -156,7 +156,7 @@ class GameOpt {
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
       const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
 
-      this.physics.world.gravity.setTo(-1 * x, y)
+      this.matter.world.gravity.setTo(-1 * x, y)
     })
 
     gravitySensor.start()
@@ -181,10 +181,9 @@ const config = {
     height: HEIGHT,
   },
   physics: {
-    default: 'arcade',
-    arcade: {
+    default: 'matter',
+    matter: {
       gravity: { y: 200 },
-      debug: false
     }
   },
   scene: GameOpt
