@@ -172,8 +172,8 @@ class GameOpt {
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
       const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
 
-      this.matter.world.gravity.x = -1 * x
-      this.matter.world.gravity.y = y
+      this.matter.world.engine.gravity.x = -1 * x
+      this.matter.world.engine.gravity.y = y
     })
 
     gravitySensor.start()
