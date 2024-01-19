@@ -13,7 +13,8 @@ class GameOpt {
     this.ball = null
 
     this.obj = {
-      frictionFactor: 0.1,
+      frictionFactor: 1,
+      friction: 0.2,
       bounceFactor: 0.5,
       weigth: 2,
       dragFactor: 0.98,
@@ -64,7 +65,7 @@ class GameOpt {
     this.ball.setScale(0.15, 0.15)
     this.ball.setCircle()
     this.ball.setBounce(this.obj.bounceFactor)
-    this.ball.setFriction(this.obj.frictionFactor)
+    this.ball.setFriction(this.obj.friction)
     this.ball.setInteractive()
     this.ball.setCollideWorldBounds(true)
     
