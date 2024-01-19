@@ -39,7 +39,7 @@ class GameOpt {
       beta: 0,
       gamma: 0,
     }
-    
+
     this.setPixelsCount()
     this.gravityController()
   }
@@ -59,7 +59,7 @@ class GameOpt {
     this.load.image('ball', './assets/football.png')
     this.load.audio('collision', './assets/collide.mp3')
   }
-  
+
   create() {
     this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
@@ -68,7 +68,7 @@ class GameOpt {
     this.ball.setFriction(this.obj.friction)
     this.ball.setInteractive()
     this.ball.setCollideWorldBounds(true)
-    
+
     // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
       console.log('accelerationGravity', this.accelerationGravity)
@@ -82,7 +82,7 @@ class GameOpt {
 
     // window.addEventListener('deviceorientation', this.handleOrientation.bind(this))
   }
-  
+
   update() {
     if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
       this.handleCollision(this.ball)
@@ -117,7 +117,7 @@ class GameOpt {
   //     const angle = Math.atan2(swipeDistanceY, swipeDistanceX)
 
   //     const swipeSpeed = Math.sqrt(swipeDistanceX ** 2 + swipeDistanceY ** 2) / deltaTime
-  
+
   //     const velocityX = Math.cos(angle) * swipeSpeed * this.forceMultiplier
   //     const velocityY = Math.sin(angle) * swipeSpeed * this.forceMultiplier
 
@@ -148,6 +148,17 @@ class GameOpt {
         this.ball.setVelocityY(yVel)
       }
     }
+  }
+
+  createBorderWalls() {
+    const { width, height } = this.sys.game.canvas
+
+    const borderThickness = 1
+
+    this.matter.add.rectangle(width / 2, 0, width, borderThickness, { isStatic: true })
+    this.matter.add.rectangle(width / 2, height, width, borderThickness, { isStatic: true })
+    this.matter.add.rectangle(0, height / 2, borderThickness, height, { isStatic: true })
+    this.matter.add.rectangle(width, height / 2, borderThickness, height, { isStatic: true })
   }
 
   gravityController() {
@@ -185,6 +196,7 @@ const config = {
     default: 'matter',
     matter: {
       gravity: { y: 0.2 },
+      enableSleeping: true,
     }
   },
   scene: GameOpt
