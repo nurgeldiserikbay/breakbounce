@@ -61,13 +61,9 @@ class GameOpt {
   }
 
   create() {
-    this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
-    this.ball.setScale(0.15, 0.15)
-    this.ball.setCircle()
-    this.ball.setBounce(this.obj.bounceFactor)
-    this.ball.setFriction(this.obj.friction)
-    this.ball.setInteractive()
-    this.ball.setCollideWorldBounds(true)
+    this.createBorderWalls()
+    this.createBall()
+    
 
     // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
@@ -148,6 +144,16 @@ class GameOpt {
         this.ball.setVelocityY(yVel)
       }
     }
+  }
+
+  createBall() {
+    this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
+    this.ball.setScale(0.15, 0.15)
+    this.ball.setCircle()
+    this.ball.setBounce(this.obj.bounceFactor)
+    this.ball.setFriction(this.obj.friction)
+    this.ball.setInteractive()
+    this.ball.setCollideWorldBounds(true)
   }
 
   createBorderWalls() {
