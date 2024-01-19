@@ -153,8 +153,8 @@ class GameOpt {
     const gravitySensor = new GravitySensor({ frequency: 30 })
 
     gravitySensor.addEventListener('reading', () => {
-      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
-      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1))
+      const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
+      const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
 
       this.matter.world.gravity.setTo(-1 * x, y)
     })
@@ -183,7 +183,7 @@ const config = {
   physics: {
     default: 'matter',
     matter: {
-      gravity: { y: 200 },
+      gravity: { y: 0.2 },
     }
   },
   scene: GameOpt
