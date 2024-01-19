@@ -155,14 +155,7 @@ class GameOpt {
   }
 
   createBorderWalls() {
-    const { width, height } = this.sys.game.canvas
-
-    const borderThickness = 1
-
-    this.matter.add.rectangle(width / 2, 0, width, borderThickness, { isStatic: true })
-    this.matter.add.rectangle(width / 2, height, width, borderThickness, { isStatic: true })
-    this.matter.add.rectangle(0, height / 2, borderThickness, height, { isStatic: true })
-    this.matter.add.rectangle(width, height / 2, borderThickness, height, { isStatic: true })
+    this.matter.world.setBounds()
   }
 
   gravityController() {
@@ -174,6 +167,7 @@ class GameOpt {
 
       this.matter.world.engine.gravity.x = -1 * x
       this.matter.world.engine.gravity.y = y
+      console.log(x, y)
     })
 
     gravitySensor.start()
