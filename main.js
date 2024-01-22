@@ -41,7 +41,7 @@ class GameOpt {
     }
 
     this.setPixelsCount()
-    this.gravityController()
+    // this.gravityController()
   }
 
   // handleOrientation(event) {
@@ -156,6 +156,7 @@ class GameOpt {
 
   createBorderWalls() {
     this.matter.world.setBounds()
+    this.matter.world.autoUpdate = true
   }
 
   gravityController() {
