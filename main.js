@@ -41,7 +41,7 @@ class GameOpt {
     }
 
     this.setPixelsCount()
-    // this.gravityController()
+    this.gravityController()
   }
 
   // handleOrientation(event) {
