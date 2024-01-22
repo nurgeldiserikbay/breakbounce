@@ -7,6 +7,7 @@ const MM_IN_METR = 1000
 
 class GameOpt {
   constructor() {
+    this.globScale = 0.5
     this.pixelsOnMm = 3
     this.pixelsOnMetr = 3000
 
@@ -41,7 +42,7 @@ class GameOpt {
     }
 
     this.setPixelsCount()
-    this.gravityController()
+    // this.gravityController()
   }
 
   // handleOrientation(event) {
@@ -155,15 +156,7 @@ class GameOpt {
   }
 
   createBorderWalls() {
-    let flag = 1
     this.matter.world.setBounds()
-    this.matter.world.autoUpdate = true
-    this.matter.world.engine.gravity.x = 0
-    this.matter.world.engine.gravity.y = flag
-    document.addEventListener('click', () => {
-      flag = -1 * flag
-      this.matter.world.engine.gravity.y = flag
-    })
   }
 
   gravityController() {
@@ -173,9 +166,8 @@ class GameOpt {
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
       const y = Math.round(gravitySensor.y * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
 
-      this.matter.world.engine.gravity.x = -1 * x
-      this.matter.world.engine.gravity.y = y
-      console.log(this.matter.world.engine.gravity)
+      this.matter.world.engine.gravity.x = -1 * Math.min(x, 40)
+      this.matter.world.engine.gravity.y = Math.min(y, 40)
     })
 
     gravitySensor.start()
@@ -185,7 +177,7 @@ class GameOpt {
     const screenSizeElem = document.querySelector('.screen-size')
 
     if (screenSizeElem) {
-      this.pixelsOnMm = Math.round(screenSizeElem.getBoundingClientRect().width / MM_IN_INCH * 10) / 10
+      this.pixelsOnMm = Math.round(screenSizeElem.getBoundingClientRect().width / MM_IN_INCH * 10) / 10 * this.globScale
       this.pixelsOnMetr = this.pixelsOnMm * MM_IN_METR
     }
   }
@@ -202,7 +194,7 @@ const config = {
   physics: {
     default: 'matter',
     matter: {
-      gravity: { y: 0.2 },
+      gravity: { y: 39.2 },
       enableSleeping: false,
     }
   },
