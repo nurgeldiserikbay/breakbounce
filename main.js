@@ -67,7 +67,7 @@ class GameOpt {
 
     // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
-      console.log('accelerationGravity', this.accelerationGravity)
+      // console.log('accelerationGravity', this.accelerationGravity)
     })
 
     this.collisionSound = this.sound.add('collision')
@@ -155,8 +155,15 @@ class GameOpt {
   }
 
   createBorderWalls() {
+    let flag = 1
     this.matter.world.setBounds()
     this.matter.world.autoUpdate = true
+    this.matter.world.engine.gravity.x = 0
+    this.matter.world.engine.gravity.y = flag
+    document.addEventListener('click', () => {
+      flag = -1 * flag
+      this.matter.world.engine.gravity.y = flag
+    })
   }
 
   gravityController() {
@@ -196,7 +203,7 @@ const config = {
     default: 'matter',
     matter: {
       gravity: { y: 0.2 },
-      enableSleeping: true,
+      enableSleeping: false,
     }
   },
   scene: GameOpt
