@@ -7,17 +7,17 @@ const MM_IN_METR = 1000
 
 class GameOpt {
   constructor() {
-    this.globScale = 0.5
+    this.globScale = 0.25
     this.pixelsOnMm = 3
     this.pixelsOnMetr = 3000
 
     this.ball = null
 
     this.obj = {
-      frictionFactor: 1,
+      frictionFactor: 0.5,
       friction: 0.2,
-      bounceFactor: 0.5,
-      weigth: 2,
+      bounceFactor: 0.1,
+      weigth: 1,
       dragFactor: 0.98,
     }
 
@@ -42,7 +42,7 @@ class GameOpt {
     }
 
     this.setPixelsCount()
-    this.gravityController()
+    // this.gravityController()
   }
 
   // handleOrientation(event) {
@@ -65,13 +65,14 @@ class GameOpt {
     this.createBorderWalls()
     this.createBall()
 
+    this.collisionSound = this.sound.add('collision')
+
 
     // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
       // console.log('accelerationGravity', this.accelerationGravity)
     })
 
-    this.collisionSound = this.sound.add('collision')
 
     // this.input.on('pointerdown', this.handleSwipeStart.bind(this))
     // this.input.on('pointermove', this.handleSwipeMove.bind(this))
@@ -81,17 +82,9 @@ class GameOpt {
   }
 
   update() {
-    if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
-      this.handleCollision(this.ball)
-    }
-  }
-
-  handleCollision(obj1) {
-    const force = Math.abs(obj1.body.velocity.x) + Math.abs(obj1.body.velocity.y)
-
-    var volume = Phaser.Math.Clamp(force / 100, 0, 1)
-    this.collisionSound.volume = volume
-    this.collisionSound.play()
+    // if (this.ball.x - this.ball.displayWidth / 2 <= 0 || this.ball.x + this.ball.displayWidth / 2 >= config.width || this.ball.y - this.ball.displayHeight / 2 <= 0 || this.ball.y + this.ball.displayHeight / 2 >= config.height) {
+    //   this.handleCollision(this.ball)
+    // }
   }
 
   // handleSwipeStart(pointer) {
@@ -126,6 +119,20 @@ class GameOpt {
   //   this.pointerStart = null
   // }
 
+  handleCollision(e) {
+    const pair = e.pairs[0]
+ 
+    if (pair && pair.contacts) {
+      const last = pair.contacts.pop()
+
+      if (last?.normalImpulse && Math.abs(last?.normalImpulse) > 10) {
+        this.collisionSound.volume = Math.abs(last?.normalImpulse) * 30
+        this.collisionSound.play()
+      }
+    }
+
+  }
+
   handleDeviceAcceleration(event) {
     if (event.timeStamp - this.accelerationGravity.freq > FREQ) {
       this.accelerationGravity = {
@@ -151,7 +158,6 @@ class GameOpt {
 
   createBall() {
     this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
-    // this.ball.setScale(0.15, 0.15)
     this.ball.setCircle()
     this.ball.setBounce(this.obj.bounceFactor)
     this.ball.setFriction(this.obj.friction)
@@ -159,6 +165,7 @@ class GameOpt {
 
   createBorderWalls() {
     this.matter.world.setBounds()
+    this.matter.world.on('collisionactive', this.handleCollision.bind(this))
   }
 
   gravityController() {
