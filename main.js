@@ -64,7 +64,7 @@ class GameOpt {
   create() {
     this.createBorderWalls()
     this.createBall()
-    
+
 
     // window.addEventListener('devicemotion', this.handleDeviceAcceleration.bind(this))
     window.addEventListener('click', () => {
@@ -135,24 +135,26 @@ class GameOpt {
         z: event.acceleration.z,
       }
 
+      let xVel, yVel
+
       if (Math.abs(this.accelerationGravity.x) > 0.3) {
-        const xVel = -1 * this.accelerationGravity.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
-        this.ball.setVelocityX(xVel)
+        xVel = -1 * this.accelerationGravity.x / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
       }
 
       if (Math.abs(this.accelerationGravity.y) > 0.3) {
-        const yVel = -1 * this.accelerationGravity.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
-        this.ball.setVelocityY(yVel)
+        yVel = -1 * this.accelerationGravity.y / this.obj.weigth * this.pixelsOnMetr * (this.obj.frictionFactor || 1)
       }
+
+      if (xVel || yVel) this.ball.applyForce(xVel, yVel)
     }
   }
 
   createBall() {
     this.ball = this.matter.add.sprite(WIDTH / 2, HEIGHT / 2, 'ball')
     this.ball.setScale(0.15, 0.15)
-    // this.ball.setCircle()
-    // this.ball.setBounce(this.obj.bounceFactor)
-    // this.ball.setFriction(this.obj.friction)
+    this.ball.setCircle()
+    this.ball.setBounce(this.obj.bounceFactor)
+    this.ball.setFriction(this.obj.friction)
   }
 
   createBorderWalls() {
@@ -160,7 +162,7 @@ class GameOpt {
   }
 
   gravityController() {
-    const gravitySensor = new GravitySensor({ frequency: 30 })
+    const gravitySensor = new GravitySensor({ frequency: 60 })
 
     gravitySensor.addEventListener('reading', () => {
       const x = Math.round(gravitySensor.x * this.pixelsOnMetr * (this.obj.frictionFactor || 1)) / 1000
@@ -194,7 +196,7 @@ const config = {
   physics: {
     default: 'matter',
     matter: {
-      gravity: { y: 39.2 },
+      gravity: { y: 5 },
       enableSleeping: false,
     }
   },
