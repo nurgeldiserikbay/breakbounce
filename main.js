@@ -15,10 +15,12 @@ class GameOpt {
 
     this.obj = {
       frictionFactor: 0.5,
-      friction: 0.2,
-      bounceFactor: 0.1,
+      friction: 0.6,
+      bounceFactor: 0,
       weigth: 1,
-      dragFactor: 0.98,
+      dragFactor: 0.3,
+      restitution: 0.5,
+      frictionAir : 0.2,
     }
 
     this.accelerationGravity = {
@@ -161,6 +163,8 @@ class GameOpt {
     this.ball.setCircle()
     this.ball.setBounce(this.obj.bounceFactor)
     this.ball.setFriction(this.obj.friction)
+    this.ball.restitution = this.obj.restitution
+    this.ball.frictionAir = this.obj.frictionAir
   }
 
   createBorderWalls() {
